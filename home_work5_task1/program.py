@@ -4,7 +4,6 @@
 
 from random import randint
 
-
 stepen = int(input('Введите натуральную степень: '))
 answer = []
 
@@ -22,4 +21,8 @@ for i in range(stepen + 1):
     else:
         continue
 
-print(' + '.join(answer) + ' = 0')
+answer_str = ' + '.join(answer) + ' = 0'
+
+with open(f"new_equation.txt", 'w') as new_file:
+    new_file.write(answer_str)
+new_file.close()
