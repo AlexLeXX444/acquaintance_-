@@ -12,7 +12,7 @@ def spisok_koefficientov (file_is):
     spisok_elem = file_read(file_is)
     spisok_koeff = [f'{spisok_elem[0]}']
     for i in range(1, len(spisok_elem)):
-        if spisok_elem[i] == '+' or spisok_elem[i] == '-':
+        if spisok_elem[i] == '+' or spisok_elem[i] == '=' or spisok_elem[i] == '0':
             continue            
         elif spisok_elem[i - 1] == '-':
             spisok_koeff.append(f'-{spisok_elem[i]}')

@@ -1,33 +1,40 @@
 # Даны два файла в каждом из которых находится запись многочлена. 
 # Сформировать файл содержащий сумму многочленов.
 
+import create_polinom
 import read_function_from_file
-import parse_nums_from_element
+import functions_equation
 
-print('Первое уравнение:')
-print(" ".join(read_function_from_file.file_read("file1.txt")))
+# создадим файлы с уравнениями
+create_polinom.create_file_polinomial(7, "file1.txt")
+create_polinom.create_file_polinomial(5, "file2.txt")
 
-print('Второе уравнение:')
-print(" ".join(read_function_from_file.file_read("file2.txt")) + "\n")
+func_str = read_function_from_file.spisok_koefficientov("file1.txt") + read_function_from_file.spisok_koefficientov("file2.txt")
+answer_str = []
 
-first_equation = read_function_from_file.spisok_koefficientov("file1.txt")
-second_equation = read_function_from_file.spisok_koefficientov("file2.txt")
-answer_equation = []
+for i in range (len(func_str)):
+    is_equeals = 0
+    for j in range (i + 1, len(func_str)):
+        if functions_equation.equation_f_x(func_str[i]) == functions_equation.equation_f_x(func_str[j]):
+            is_equeals = 1
+            answer_str.append(f'{functions_equation.equation_summ(func_str[i], func_str[j])}')
+            func_str[i] = '0'
+            func_str[j] = '0'
+        elif functions_equation.is_number(func_str[i]) and functions_equation.is_number(func_str[j]):
+            if func_str[i] != '0' and func_str[j] != '0':
+                is_equeals = 1
+                answer_str.append(f'{functions_equation.equation_summ(func_str[i], func_str[j])}')
+                func_str[i] = '0'
+                func_str[j] = '0'
+    if is_equeals == 0:
+        answer_str.append(f'{func_str[i]}')
+        func_str[i] = '0'
 
-for i in range (len(first_equation)):
-    is_equeals = False
-    for j in range(len(second_equation)):
-        if parse_nums_from_element.parse_no_nums(first_equation[i]) == parse_nums_from_element.parse_no_nums(second_equation[j]):
-            is_equeals = True
-            first_num = int(parse_nums_from_element.parse_nums(first_equation[i]))
-            second_num = int(parse_nums_from_element.parse_nums(second_equation[j]))
-            answer_equation.append(f'{first_num + second_num}{parse_nums_from_element.parse_no_nums(first_equation[i])}')
-    if not is_equeals:
-        answer_equation.append(f'{first_equation[i]}')
+while("0" in answer_str) :
+    answer_str.remove("0")
 
 
-for i in range (len(answer_equation)):
-    if (int(parse_nums_from_element.parse_nums(answer_equation[i]))) <= 1:
-        answer_equation[i] = parse_nums_from_element.parse_no_nums(answer_equation[i])
 
-print(answer_equation)
+with open("answer.txt", 'w') as new_file:
+        new_file.write(f'{" + ".join(answer_str)} = 0')
+new_file.close()
